@@ -5,34 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Konzept O - 創造と革新のデザインスタジオ</title>
-  <!-- メインCSSを読み込み -->
+  <!-- メインCSS読み込み -->
   <link rel="stylesheet" href="style.css">
   <!-- Google Fonts Poppins 読み込み -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- ナビゲーションバー -->
+  <!-- ナビバー -->
   <nav class="navbar">
     <div class="container">
       <a href="#" class="logo">Konzept&nbsp;O</a>
-      <!-- モバイル用ハンバーガーメニュー：span×3でアイコン表現 -->
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-      </button>
-      <!-- メニューリンク -->
       <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Contact</a></li>
+        <div class="nav-indicator"></div> <!-- 動くインジケーター -->
       </ul>
+      <button class="nav-toggle" aria-label="メニュー開閉">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
-  <!-- ヒーローセクション：タイプライター効果を追加 -->
-  <header class="hero">
+  <!-- ヒーロー：パララックス背景 -->
+  <header id="hero" class="hero">
+    <div class="hero-bg"></div><!-- 背景レイヤー -->
     <div class="container">
       <h1 class="typing">創造と革新のデザインスタジオ</h1>
       <p>ブランド戦略からウェブデザインまで、一貫したクリエイティブソリューションを提供します。</p>
@@ -40,66 +39,108 @@
     </div>
   </header>
 
-  <!-- About セクション：フェードインアニメーション -->
+  <!-- About: カウンターアニメーション -->
   <section id="about" class="about">
-    <div class="container fade-in">
+    <div class="container">
       <h2>About Us</h2>
-      <p>私たちKonzept&nbsp;Oは、ビジョンを形にするデザインスタジオです。お客様のブランドストーリーを深く理解し、ユニークでインパクトのある体験を創造します。</p>
+      <p>私たちKonzept&nbsp;Oは、ビジョンを形にするデザインスタジオです。</p>
+      <div class="counters">
+        <div class="counter-item">
+          <div class="counter" data-target="150">0</div>
+          <p>Projects</p>
+        </div>
+        <div class="counter-item">
+          <div class="counter" data-target="75">0</div>
+          <p>Clients</p>
+        </div>
+        <div class="counter-item">
+          <div class="counter" data-target="10">0</div>
+          <p>Awards</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Services セクション：カードにチルト効果 -->
+  <!-- Services: フリップカード -->
   <section id="services" class="services">
-    <div class="container fade-in">
+    <div class="container">
       <h2>Services</h2>
       <div class="service-grid">
         <div class="card">
-          <h3>Branding</h3>
-          <p>ブランド戦略とビジュアルアイデンティティの構築。</p>
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>Branding</h3>
+            </div>
+            <div class="card-back">
+              <p>ブランド戦略とビジュアルアイデンティティの構築。</p>
+            </div>
+          </div>
         </div>
         <div class="card">
-          <h3>Web Design</h3>
-          <p>レスポンシブで魅力的なウェブサイトデザイン。</p>
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>Web Design</h3>
+            </div>
+            <div class="card-back">
+              <p>レスポンシブなウェブサイトデザイン。</p>
+            </div>
+          </div>
         </div>
         <div class="card">
-          <h3>UI/UX</h3>
-          <p>直感的なユーザー体験とインターフェース設計。</p>
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>UI/UX</h3>
+            </div>
+            <div class="card-back">
+              <p>直感的なユーザー体験設計。</p>
+            </div>
+          </div>
         </div>
         <div class="card">
-          <h3>Graphic Design</h3>
-          <p>ロゴ、広告、印刷物などのグラフィックデザイン。</p>
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>Graphic Design</h3>
+            </div>
+            <div class="card-back">
+              <p>印刷物・広告物のグラフィックデザイン。</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Portfolio セクション：カードフェード＆スケールアップ -->
+  <!-- Portfolio: スライダー -->
   <section id="portfolio" class="portfolio">
     <div class="container">
       <h2>Portfolio</h2>
-      <div class="portfolio-grid">
-        <div class="item">Project 1</div>
-        <div class="item">Project 2</div>
-        <div class="item">Project 3</div>
-        <div class="item">Project 4</div>
+      <div class="slider">
+        <button class="prev">‹</button>
+        <div class="slides">
+          <div class="slide">Project 1</div>
+          <div class="slide">Project 2</div>
+          <div class="slide">Project 3</div>
+          <div class="slide">Project 4</div>
+        </div>
+        <button class="next">›</button>
       </div>
     </div>
   </section>
 
-  <!-- Contact セクション -->
+  <!-- Contact -->
   <section id="contact" class="contact">
-    <div class="container fade-in">
+    <div class="container">
       <h2>Contact</h2>
-      <form action="#" method="post">
-        <input type="text" name="name" placeholder="お名前" required>
-        <input type="email" name="email" placeholder="メールアドレス" required>
-        <textarea name="message" rows="4" placeholder="お問い合わせ内容" required></textarea>
+      <form>
+        <input type="text" placeholder="お名前" required>
+        <input type="email" placeholder="メールアドレス" required>
+        <textarea rows="4" placeholder="お問い合わせ内容" required></textarea>
         <button type="submit" class="btn">Send Message</button>
       </form>
     </div>
   </section>
 
-  <!-- フッター -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p>&copy; 2025 Konzept&nbsp;O. All rights reserved.</p>
@@ -107,79 +148,66 @@
     </div>
   </footer>
 
-  <!-- JavaScript: メニュー開閉、タイプライター、チルト効果、スクロールアニメーションなど -->
+  <!-- JavaScript: パララックス、カウンター、フリップ、スライダー、ナビインジケーター -->
   <script>
-    // 1: モバイルナビの開閉
-    const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    navToggle.addEventListener('click', () => {
-      // nav-toggleにopenクラスを切り替え（ハンバーガーアニメーション用）
-      navToggle.classList.toggle('open');
-      // メニューリンクの表示切り替え
-      navLinks.classList.toggle('open');
+    // ナビインジケーター：リンク位置にバーを移動
+    const indicator = document.querySelector('.nav-indicator');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        const rect = link.getBoundingClientRect();
+        indicator.style.width = rect.width + 'px';
+        indicator.style.left = link.offsetLeft + 'px';
+      });
+      link.addEventListener('mouseleave', () => {
+        indicator.style.width = '0';
+      });
     });
 
-    // 2: タイプライター効果
-    const typingElement = document.querySelector('.typing');
-    const text = typingElement.textContent;
-    typingElement.textContent = '';
-    let idx = 0;
-    function type() {
-      if (idx < text.length) {
-        typingElement.textContent += text.charAt(idx);
-        idx++;
-        setTimeout(type, 100);
-      }
-    }
-    type(); // 実行開始
+    // ヒーローパララックス：マウス位置で背景移動
+    const heroBg = document.querySelector('.hero-bg');
+    document.getElementById('hero').addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth) * 30;
+      const y = (e.clientY / window.innerHeight) * 30;
+      heroBg.style.transform = `translate(${x}px, ${y}px)`;
+    });
 
-    // 3: IntersectionObserverによるフェードイン
-    const faders = document.querySelectorAll('.fade-in');
-    const appearOptions = { threshold: 0.2 };
-    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    // カウンター数値アニメーション
+    const counters = document.querySelectorAll('.counter');
+    const counterObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('appear');
-        observer.unobserve(entry.target);
+        const el = entry.target;
+        const target = +el.dataset.target;
+        let count = 0;
+        const step = target / 100;
+        const update = () => {
+          count += step;
+          if (count < target) {
+            el.textContent = Math.ceil(count);
+            requestAnimationFrame(update);
+          } else {
+            el.textContent = target;
+          }
+        };
+        update();
+        counterObserver.unobserve(el);
       });
-    }, appearOptions);
-    faders.forEach(fader => appearOnScroll.observe(fader));
+    }, { threshold: 0.3 });
+    counters.forEach(c => counterObserver.observe(c));
 
-    // 4: サービスカードのチルト効果
-    const cards = document.querySelectorAll('.services .card');
-    cards.forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const moveX = (x / rect.width * 30) - 15;
-        const moveY = (y / rect.height * 30) - 15;
-        card.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg) scale(1.05)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'rotateY(0deg) rotateX(0deg) scale(1)';
-      });
+    // フリップカード：CSSで完結
+    // スライダー実装
+    const slides = document.querySelector('.slides');
+    const slideCount = slides.children.length;
+    let current = 0;
+    document.querySelector('.next').addEventListener('click', () => {
+      current = (current + 1) % slideCount;
+      slides.style.transform = `translateX(-${current * 100}%)`;
     });
-
-    // 5: ポートフォリオアイテム hoverで拡大
-    const items = document.querySelectorAll('.portfolio .item');
-    items.forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        item.classList.add('hover-scale');
-      });
-      item.addEventListener('mouseleave', () => {
-        item.classList.remove('hover-scale');
-      });
-    });
-
-    // 6: スムーススクロール
-    document.querySelectorAll('.nav-links a, .btn').forEach(anchor => {
-      anchor.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (!target) return;
-        target.scrollIntoView({ behavior: 'smooth' });
-      });
+    document.querySelector('.prev').addEventListener('click', () => {
+      current = (current - 1 + slideCount) % slideCount;
+      slides.style.transform = `translateX(-${current * 100}%)`;
     });
   </script>
 </body>
