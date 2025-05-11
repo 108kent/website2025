@@ -1,7 +1,9 @@
 // ハンバーガーメニュー開閉
 const navLinks = document.querySelector('.nav-links');
-document.querySelector('.hamburger').addEventListener('click', () => {
+const hamburger = document.querySelector('.hamburger');
+hamburger.addEventListener('click', () => {
   navLinks.classList.toggle('open');
+  hamburger.classList.toggle('active');
 });
 
 // ヒーローパララックス
@@ -19,7 +21,7 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const el = entry.target;
-      const target = +el.dataset.target;
+      const target = +el.dataset-target;
       let count = 0;
       const step = target / 100;
       const update = () => {
