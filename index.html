@@ -6,6 +6,8 @@
   <title>KonzeptO - 創造と革新のデザインスタジオ</title>
   <!-- スタイルシート読み込み -->
   <link rel="stylesheet" href="style.css" />
+  <!-- スクリプトを遅延読み込み -->
+  <script defer src="main.js"></script>
 </head>
 <body>
   <!-- ナビバー -->
@@ -19,7 +21,7 @@
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <div class="hamburger">
+      <div class="hamburger" aria-label="メニュー開閉" role="button">
         <span></span><span></span><span></span>
       </div>
     </div>
@@ -117,8 +119,5 @@
       <p>Contact: <a href="mailto:info@konzept-o.com">info@konzept-o.com</a></p>
     </div>
   </footer>
-
-  <!-- スクリプト読み込み -->
-  <script src="main.js"></script>
 </body>
 </html>
