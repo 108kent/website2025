@@ -1,139 +1,109 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konzept O - 創造と革新のデザインスタジオ</title>
-  <!-- メインCSS読み込み -->
-  <link rel="stylesheet" href="style.css">
-  <!-- Google Fonts Poppins 読み込み -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KonzeptO - 創造と革新のデザインスタジオ</title>
+  <!-- スタイルシート読み込み -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- ナビバー -->
   <nav class="navbar">
-    <div class="container">
-      <a href="#" class="logo">Konzept&nbsp;O</a>
+    <div class="container nav-container">
+      <a href="#" class="logo">Konzept<span>O</span></a>
       <ul class="nav-links">
         <li><a href="#hero">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#contact">Contact</a></li>
-        <div class="nav-indicator"></div> <!-- 動くインジケーター -->
       </ul>
-      <button class="nav-toggle" aria-label="メニュー開閉">
+      <div class="hamburger">
         <span></span><span></span><span></span>
-      </button>
+      </div>
     </div>
   </nav>
 
-  <!-- ヒーロー：パララックス背景 -->
-  <header id="hero" class="hero">
-    <div class="hero-bg"></div><!-- 背景レイヤー -->
-    <div class="container">
-      <h1 class="typing">創造と革新のデザインスタジオ</h1>
-      <p>ブランド戦略からウェブデザインまで、一貫したクリエイティブソリューションを提供します。</p>
+  <!-- ヒーロー -->
+  <section id="hero" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1>創造と革新の<br />デザインスタジオ</h1>
+      <p>ブランド戦略からウェブデザインまで、一貫した<br />クリエイティブソリューションを提供します。</p>
       <a href="#services" class="btn">Our Services</a>
     </div>
-  </header>
+  </section>
 
-  <!-- About: カウンターアニメーション -->
+  <!-- About -->
   <section id="about" class="about">
     <div class="container">
       <h2>About Us</h2>
-      <p>私たちKonzept&nbsp;Oは、ビジョンを形にするデザインスタジオです。</p>
+      <p>私たちKonzeptOは、ビジョンを形にするデザインスタジオです。</p>
       <div class="counters">
         <div class="counter-item">
-          <div class="counter" data-target="150">0</div>
+          <h3 class="counter" data-target="150">0</h3>
           <p>Projects</p>
         </div>
         <div class="counter-item">
-          <div class="counter" data-target="75">0</div>
+          <h3 class="counter" data-target="75">0</h3>
           <p>Clients</p>
         </div>
         <div class="counter-item">
-          <div class="counter" data-target="10">0</div>
+          <h3 class="counter" data-target="10">0</h3>
           <p>Awards</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Services: フリップカード -->
+  <!-- Services -->
   <section id="services" class="services">
     <div class="container">
       <h2>Services</h2>
       <div class="service-grid">
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h3>Branding</h3>
-            </div>
-            <div class="card-back">
-              <p>ブランド戦略とビジュアルアイデンティティの構築。</p>
-            </div>
-          </div>
+        <div class="service-card">
+          <h3>Branding</h3>
+          <p>ブランド戦略とビジュアルアイデンティティの構築。</p>
         </div>
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h3>Web Design</h3>
-            </div>
-            <div class="card-back">
-              <p>レスポンシブなウェブサイトデザイン。</p>
-            </div>
-          </div>
+        <div class="service-card">
+          <h3>Web Design</h3>
+          <p>レスポンシブなウェブサイトデザイン。</p>
         </div>
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h3>UI/UX</h3>
-            </div>
-            <div class="card-back">
-              <p>直感的なユーザー体験設計。</p>
-            </div>
-          </div>
+        <div class="service-card">
+          <h3>UI/UX</h3>
+          <p>直感的なユーザー体験設計。</p>
         </div>
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h3>Graphic Design</h3>
-            </div>
-            <div class="card-back">
-              <p>印刷物・広告物のグラフィックデザイン。</p>
-            </div>
-          </div>
+        <div class="service-card">
+          <h3>Graphic Design</h3>
+          <p>印刷物・広告物のグラフィックデザイン。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Portfolio: スライダー -->
+  <!-- Portfolio -->
   <section id="portfolio" class="portfolio">
     <div class="container">
       <h2>Portfolio</h2>
-      <div class="slider">
-        <button class="prev">‹</button>
+      <div class="carousel">
         <div class="slides">
           <div class="slide">Project 1</div>
           <div class="slide">Project 2</div>
           <div class="slide">Project 3</div>
           <div class="slide">Project 4</div>
         </div>
-        <button class="next">›</button>
       </div>
     </div>
   </section>
 
   <!-- Contact -->
   <section id="contact" class="contact">
-    <div class="container">
+    <div class="container contact-container">
       <h2>Contact</h2>
       <form>
-        <input type="text" placeholder="お名前" required>
-        <input type="email" placeholder="メールアドレス" required>
+        <input type="text" placeholder="お名前" required />
+        <input type="email" placeholder="メールアドレス" required />
         <textarea rows="4" placeholder="お問い合わせ内容" required></textarea>
         <button type="submit" class="btn">Send Message</button>
       </form>
@@ -143,72 +113,12 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2025 Konzept&nbsp;O. All rights reserved.</p>
+      <p>&copy; 2025 KonzeptO. All rights reserved.</p>
       <p>Contact: <a href="mailto:info@konzept-o.com">info@konzept-o.com</a></p>
     </div>
   </footer>
 
-  <!-- JavaScript: パララックス、カウンター、フリップ、スライダー、ナビインジケーター -->
-  <script>
-    // ナビインジケーター：リンク位置にバーを移動
-    const indicator = document.querySelector('.nav-indicator');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        const rect = link.getBoundingClientRect();
-        indicator.style.width = rect.width + 'px';
-        indicator.style.left = link.offsetLeft + 'px';
-      });
-      link.addEventListener('mouseleave', () => {
-        indicator.style.width = '0';
-      });
-    });
-
-    // ヒーローパララックス：マウス位置で背景移動
-    const heroBg = document.querySelector('.hero-bg');
-    document.getElementById('hero').addEventListener('mousemove', e => {
-      const x = (e.clientX / window.innerWidth) * 30;
-      const y = (e.clientY / window.innerHeight) * 30;
-      heroBg.style.transform = `translate(${x}px, ${y}px)`;
-    });
-
-    // カウンター数値アニメーション
-    const counters = document.querySelectorAll('.counter');
-    const counterObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = +el.dataset.target;
-        let count = 0;
-        const step = target / 100;
-        const update = () => {
-          count += step;
-          if (count < target) {
-            el.textContent = Math.ceil(count);
-            requestAnimationFrame(update);
-          } else {
-            el.textContent = target;
-          }
-        };
-        update();
-        counterObserver.unobserve(el);
-      });
-    }, { threshold: 0.3 });
-    counters.forEach(c => counterObserver.observe(c));
-
-    // フリップカード：CSSで完結
-    // スライダー実装
-    const slides = document.querySelector('.slides');
-    const slideCount = slides.children.length;
-    let current = 0;
-    document.querySelector('.next').addEventListener('click', () => {
-      current = (current + 1) % slideCount;
-      slides.style.transform = `translateX(-${current * 100}%)`;
-    });
-    document.querySelector('.prev').addEventListener('click', () => {
-      current = (current - 1 + slideCount) % slideCount;
-      slides.style.transform = `translateX(-${current * 100}%)`;
-    });
-  </script>
+  <!-- スクリプト読み込み -->
+  <script src="main.js"></script>
 </body>
 </html>
