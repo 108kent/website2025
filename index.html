@@ -5,13 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Konzept O - 創造と革新のデザインスタジオ</title>
+  <!-- CSS変数でテーマカラーを管理 -->
   <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts Poppins 読み込み -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- ナビゲーションバー -->
   <nav class="navbar">
     <div class="container">
-      <a href="#" class="logo">Konzept O</a>
+      <a href="#" class="logo">Konzept&nbsp;O</a>
+      <!-- モバイル用ハンバーガーメニュー -->
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
@@ -21,6 +28,7 @@
     </div>
   </nav>
 
+  <!-- ヒーローセクション -->
   <header class="hero">
     <div class="container">
       <h1>創造と革新のデザインスタジオ</h1>
@@ -29,13 +37,15 @@
     </div>
   </header>
 
+  <!-- About セクション -->
   <section id="about" class="about">
     <div class="container">
       <h2>About Us</h2>
-      <p>私たちKonzept Oは、ビジョンを形にするデザインスタジオです。お客様のブランドストーリーを深く理解し、ユニークでインパクトのある体験を創造します。</p>
+      <p>私たちKonzept&nbsp;Oは、ビジョンを形にするデザインスタジオです。お客様のブランドストーリーを深く理解し、ユニークでインパクトのある体験を創造します。</p>
     </div>
   </section>
 
+  <!-- Services セクション -->
   <section id="services" class="services">
     <div class="container">
       <h2>Services</h2>
@@ -60,6 +70,7 @@
     </div>
   </section>
 
+  <!-- Portfolio セクション: IntersectionObserver でスクロール時にアニメーション -->
   <section id="portfolio" class="portfolio">
     <div class="container">
       <h2>Portfolio</h2>
@@ -72,9 +83,13 @@
     </div>
   </section>
 
+  <!-- Contact セクション：ダークモード切替ボタン追加 -->
   <section id="contact" class="contact">
     <div class="container">
-      <h2>Contact</h2>
+      <div class="contact-header">
+        <h2>Contact</h2>
+        <button id="theme-toggle" class="theme-toggle">🌙</button> <!-- ダークモード切替 -->
+      </div>
       <form action="#" method="post">
         <input type="text" name="name" placeholder="お名前" required>
         <input type="email" name="email" placeholder="メールアドレス" required>
@@ -84,11 +99,53 @@
     </div>
   </section>
 
+  <!-- フッター -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2025 Konzept O. All rights reserved.</p>
+      <p>&copy; 2025 Konzept&nbsp;O. All rights reserved.</p>
       <p>Contact: <a href="mailto:info@konzept-o.com">info@konzept-o.com</a></p>
     </div>
   </footer>
+
+  <!-- モダンなJS機能をまとめたスクリプト -->
+  <script>
+    // モバイルナビメニューの開閉処理
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // IntersectionObserver を使ったポートフォリオアイテムのフェードイン
+    const items = document.querySelectorAll('.portfolio .item');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible'); // スクロールで表示
+          observer.unobserve(entry.target); // 一度実行後に監視解除
+        }
+      });
+    }, { threshold: 0.1 });
+    items.forEach(item => observer.observe(item));
+
+    // ダークモードの切り替え
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      // ボタンのアイコン切り替え
+      themeToggle.textContent = body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+
+    // スムーススクロール
+    document.querySelectorAll('.nav-links a, .btn').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault(); // デフォルトのジャンプを防止
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth' // スムーススクロール
+        });
+      });
+    });
+  </script>
 </body>
 </html>
