@@ -357,25 +357,85 @@
         /* Team Section */
         .team {
             padding: 80px 0;
+            background: #f8f9fa;
         }
 
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
         }
 
         .member-card {
             background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, black, #333);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .member-card:hover::before {
+            transform: scaleX(1);
         }
 
         .member-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .member-photo-container {
+            position: relative;
+            overflow: hidden;
+            height: 300px;
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+        }
+
+        .member-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s ease;
+            filter: grayscale(100%);
+        }
+
+        .member-card:hover .member-photo {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .member-card:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .member-info {
+            padding: 2rem;
+            text-align: left;
+            position: relative;
         }
 
         .member-role {
@@ -383,18 +443,95 @@
             font-weight: bold;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
 
         .member-name {
-            font-size: 1.3rem;
-            color: #2c3e50;
+            font-size: 1.5rem;
+            color: black;
             margin-bottom: 1rem;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .member-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: black;
+            transition: width 0.4s ease;
+        }
+
+        .member-card:hover .member-name::after {
+            width: 50px;
         }
 
         .member-bio {
             font-size: 0.9rem;
-            line-height: 1.6;
+            line-height: 1.7;
+            color: #666;
+            text-align: justify;
+        }
+
+        .member-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .member-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: black;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .social-links {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .member-card:hover .social-links {
+            opacity: 1;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 5px;
+            transition: background 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .social-link:hover {
+            background: black;
         }
 
         /* Company Section */
@@ -824,20 +961,94 @@
         <div class="container">
             <h2 class="section-title">役員紹介</h2>
             <div class="team-grid">
-                <div class="member-card fade-in">
-                    <div class="member-role">代表取締役</div>
-                    <h3 class="member-name">齋藤 健人</h3>
-                    <p class="member-bio">2014年よりドイツ在住。早稲田大学商学部卒業後、Göttingen大学大学院BWL修士卒。卒業後はドイツメーカーの貿易部でマネージャーとしてASEAN等新興市場の展開に貢献。大学院在籍時から取り組んでいた貿易×WEBマーケティングのビジネスに一本化するため、2021年株式会社Konzept-Oを設立。兼麗澤大学非常勤講師。</p>
+                <div class="member-card fade-in" data-member="saito">
+                    <div class="member-photo-container">
+                        <img src="./saito.png" alt="齋藤健人" class="member-photo">
+                        <div class="photo-overlay"></div>
+                        <div class="social-links">
+                            <a href="#" class="social-link">🌐</a>
+                            <a href="#" class="social-link">💼</a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role">代表取締役 / CEO</div>
+                        <h3 class="member-name">齋藤 健人</h3>
+                        <p class="member-bio">2014年よりドイツ在住。早稲田大学商学部卒業後、Göttingen大学大学院BWL修士卒。卒業後はドイツメーカーの貿易部でマネージャーとしてASEAN等新興市場の展開に貢献。大学院在籍時から取り組んでいた貿易×WEBマーケティングのビジネスに一本化するため、2021年株式会社Konzept-Oを設立。兼麗澤大学非常勤講師。</p>
+                        <div class="member-stats">
+                            <div class="member-stat">
+                                <span class="stat-value">10+</span>
+                                <span class="stat-label">Years in EU</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">MBA</span>
+                                <span class="stat-label">Germany</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">2021</span>
+                                <span class="stat-label">Founded</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="member-card fade-in">
-                    <div class="member-role">共同代表取締役</div>
-                    <h3 class="member-name">禅院 昭</h3>
-                    <p class="member-bio">福岡県福岡市在住。長崎大学環境科学部を卒業後にフリースクールやイベント運営に携わる。20代半ばで広告業やその他代理店業の会社を立ち上げる。その後、エストニアと日本を繋ぐプロジェクトやこれまでの関係性を築いた仲間と会社を設立・仲間の会社役員に就任。</p>
+                
+                <div class="member-card fade-in" data-member="zenin">
+                    <div class="member-photo-container">
+                        <img src="./zenin.jpg" alt="禅院昭" class="member-photo">
+                        <div class="photo-overlay"></div>
+                        <div class="social-links">
+                            <a href="#" class="social-link">🌐</a>
+                            <a href="#" class="social-link">💼</a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role">共同代表取締役 / Co-CEO</div>
+                        <h3 class="member-name">禅院 昭</h3>
+                        <p class="member-bio">福岡県福岡市在住。長崎大学環境科学部を卒業後にフリースクールやイベント運営に携わる。20代半ばで広告業やその他代理店業の会社を立ち上げる。その後、エストニアと日本を繋ぐプロジェクトやこれまでの関係性を築いた仲間と会社を設立・仲間の会社役員に就任。</p>
+                        <div class="member-stats">
+                            <div class="member-stat">
+                                <span class="stat-value">福岡</span>
+                                <span class="stat-label">Base</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">広告</span>
+                                <span class="stat-label">Expert</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">EST</span>
+                                <span class="stat-label">Project</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="member-card fade-in">
-                    <div class="member-role">CMO</div>
-                    <h3 class="member-name">永堀 佑樹</h3>
-                    <p class="member-bio">麗澤大学卒業。日・英・独語のトリリンガル。2013年にドイツへ移住し、シャルケ・バイエルンの広報代理でウェブマーケティングを牽引。その後、在独大手メーカーにて経営企画に従事し、担当エリアの赤字ビジネスを黒字回復させる。2022年、日本へ帰国しKonzept-Oに参画。欧州で培った人脈とマーケティング知識を生かし、コンサルティングを行う。兼麗澤大学非常勤講師。</p>
+                
+                <div class="member-card fade-in" data-member="nagahori">
+                    <div class="member-photo-container">
+                        <img src="./nagahori.png" alt="永堀佑樹" class="member-photo">
+                        <div class="photo-overlay"></div>
+                        <div class="social-links">
+                            <a href="#" class="social-link">🌐</a>
+                            <a href="#" class="social-link">💼</a>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-role">Chief Marketing Officer</div>
+                        <h3 class="member-name">永堀 佑樹</h3>
+                        <p class="member-bio">麗澤大学卒業。日・英・独語のトリリンガル。2013年にドイツへ移住し、シャルケ・バイエルンの広報代理でウェブマーケティングを牽引。その後、在独大手メーカーにて経営企画に従事し、担当エリアの赤字ビジネスを黒字回復させる。2022年、日本へ帰国しKonzept-Oに参画。欧州で培った人脈とマーケティング知識を生かし、コンサルティングを行う。兼麗澤大学非常勤講師。</p>
+                        <div class="member-stats">
+                            <div class="member-stat">
+                                <span class="stat-value">3</span>
+                                <span class="stat-label">Languages</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">9+</span>
+                                <span class="stat-label">Years EU</span>
+                            </div>
+                            <div class="member-stat">
+                                <span class="stat-value">CMO</span>
+                                <span class="stat-label">Marketing</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
