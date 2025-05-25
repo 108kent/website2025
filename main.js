@@ -207,6 +207,24 @@ class KonzeptOWebsite {
                 this.createParticleEffect(card);
             });
         });
+
+        // Team member card interactions
+        document.querySelectorAll('.member-card').forEach(card => {
+            const member = card.getAttribute('data-member');
+            
+            card.addEventListener('click', () => {
+                this.showMemberDetails(member);
+            });
+
+            // Photo hover effect enhancement
+            card.addEventListener('mouseenter', () => {
+                this.enhanceMemberCard(card);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                this.resetMemberCard(card);
+            });
+        });
     }
 
     // Show feature details (placeholder for future expansion)
@@ -219,6 +237,47 @@ class KonzeptOWebsite {
         
         // Simple alert for now - can be expanded to modal
         alert(details[feature] || 'More details coming soon!');
+    }
+
+    // Show member details
+    showMemberDetails(member) {
+        const details = {
+            saito: '代表取締役 齋藤健人 - ドイツ在住10年以上の経験を活かし、日欧間のビジネス架け橋として活動',
+            zenin: '共同代表取締役 禅院昭 - 福岡を拠点とし、九州地域の中小企業をヨーロッパ市場へと導く',
+            nagahori: 'CMO 永堀佑樹 - トリリンガルの能力を活かし、多言語マーケティング戦略を牽引'
+        };
+        
+        alert(details[member] || 'More details coming soon!');
+    }
+
+    // Enhance member card on hover
+    enhanceMemberCard(card) {
+        const photo = card.querySelector('.member-photo');
+        const info = card.querySelector('.member-info');
+        
+        if (photo) {
+            photo.style.transform = 'scale(1.05)';
+            photo.style.filter = 'grayscale(0%) brightness(1.1)';
+        }
+        
+        if (info) {
+            info.style.transform = 'translateY(-5px)';
+        }
+    }
+
+    // Reset member card
+    resetMemberCard(card) {
+        const photo = card.querySelector('.member-photo');
+        const info = card.querySelector('.member-info');
+        
+        if (photo) {
+            photo.style.transform = 'scale(1)';
+            photo.style.filter = 'grayscale(100%)';
+        }
+        
+        if (info) {
+            info.style.transform = 'translateY(0)';
+        }
     }
 
     // Create particle effect
