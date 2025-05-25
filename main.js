@@ -17,6 +17,8 @@ class KonzeptOWebsite {
         this.setupParallaxEffects();
         this.setupLoadingAnimations();
         this.setupResponsiveMenu();
+        this.setupHolographicEffects();
+        this.createMatrixRain();
     }
 
     // Smooth scrolling for navigation links
@@ -373,6 +375,11 @@ class KonzeptOWebsite {
                         else if (text === '2021') animateNumber(statNumber, 2021);
                         else if (text === '3') animateNumber(statNumber, 3);
                         else if (text === '100M¥') animateNumber(statNumber, 100);
+                        
+                        // Add cyber glow effect
+                        setTimeout(() => {
+                            statNumber.style.textShadow = '0 0 20px currentColor';
+                        }, 1000);
                     }
                 }
             });
@@ -380,6 +387,189 @@ class KonzeptOWebsite {
 
         document.querySelectorAll('.stat-card').forEach(card => {
             statObserver.observe(card);
+        });
+
+        // Advanced chart interactions with cyber effects
+        this.setupCyberChartEffects();
+    }
+
+    // Cyber chart effects
+    setupCyberChartEffects() {
+        const chartBars = document.querySelectorAll('.chart-bar');
+        
+        chartBars.forEach((bar, index) => {
+            // Random glow pulse
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    bar.style.filter = 'brightness(1.3) saturate(1.5)';
+                    setTimeout(() => {
+                        bar.style.filter = 'none';
+                    }, 200);
+                }
+            }, 2000 + index * 500);
+
+            // Data stream effect
+            bar.addEventListener('click', () => {
+                this.createDataStream(bar);
+            });
+        });
+    }
+
+    // Create data stream effect
+    createDataStream(element) {
+        const rect = element.getBoundingClientRect();
+        
+        for (let i = 0; i < 10; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '2px';
+            particle.style.height = '10px';
+            particle.style.background = `hsl(${180 + Math.random() * 60}, 100%, 50%)`;
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            particle.style.boxShadow = '0 0 10px currentColor';
+            
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.bottom;
+            
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+            
+            document.body.appendChild(particle);
+            
+            // Animate data stream
+            const animation = particle.animate([
+                { 
+                    transform: 'translateY(0) scale(1)', 
+                    opacity: 1 
+                },
+                { 
+                    transform: `translateY(-${100 + Math.random() * 100}px) scale(0.5)`, 
+                    opacity: 0 
+                }
+            ], {
+                duration: 1000 + Math.random() * 500,
+                easing: 'ease-out'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+    }
+
+    // Enhanced member card interactions with cyber effects
+    enhanceMemberCard(card) {
+        const photo = card.querySelector('.member-photo');
+        const info = card.querySelector('.member-info');
+        const name = card.querySelector('.member-name');
+        
+        if (photo) {
+            photo.style.transform = 'scale(1.05)';
+            photo.style.filter = 'grayscale(0%) brightness(1.1) saturate(1.2)';
+            photo.style.boxShadow = '0 0 30px rgba(0,255,255,0.5)';
+        }
+        
+        if (info) {
+            info.style.transform = 'translateY(-5px)';
+        }
+        
+        if (name) {
+            name.style.textShadow = '0 0 10px rgba(0,255,255,0.8)';
+        }
+        
+        // Add cyber border effect
+        card.style.borderImage = 'linear-gradient(45deg, #00ffff, #ff00ff, #00ff00) 1';
+    }
+
+    // Reset member card
+    resetMemberCard(card) {
+        const photo = card.querySelector('.member-photo');
+        const info = card.querySelector('.member-info');
+        const name = card.querySelector('.member-name');
+        
+        if (photo) {
+            photo.style.transform = 'scale(1)';
+            photo.style.filter = 'grayscale(100%)';
+            photo.style.boxShadow = 'none';
+        }
+        
+        if (info) {
+            info.style.transform = 'translateY(0)';
+        }
+        
+        if (name) {
+            name.style.textShadow = 'none';
+        }
+        
+        card.style.borderImage = 'none';
+    }
+
+    // Matrix rain effect (optional)
+    createMatrixRain() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '1';
+        canvas.style.opacity = '0.1';
+        
+        document.body.appendChild(canvas);
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const charArray = chars.split('');
+        
+        const columns = canvas.width / 20;
+        const drops = [];
+        
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+        
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff00';
+            ctx.font = '15px monospace';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * 20, drops[i] * 20);
+                
+                if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        };
+        
+        // Uncomment to enable matrix rain
+        // setInterval(draw, 33);
+    }
+
+    // Holographic effect for company info
+    setupHolographicEffects() {
+        const infoItems = document.querySelectorAll('.info-item-modern');
+        
+        infoItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.background = 'linear-gradient(45deg, rgba(0,255,255,0.1), rgba(255,0,255,0.1))';
+                item.style.transform = 'scale(1.02) rotateY(5deg)';
+                item.style.boxShadow = '0 20px 40px rgba(0,255,255,0.3)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.background = 'rgba(0,0,0,0.8)';
+                item.style.transform = 'scale(1) rotateY(0deg)';
+                item.style.boxShadow = 'none';
+            });
         });
     }
 
