@@ -180,9 +180,35 @@ body {
     color: white;
 }
 
-.status-cancelled {
-    background: #e74c3c;
+.status-in-warehouse {
+    background: #9b59b6;
     color: white;
+}
+
+/* 倉庫関連 */
+.warehouse-btn {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.warehouse-btn:hover {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    transform: scale(1.05);
+}
+
+.warehouse-cost {
+    font-size: 0.8rem;
+    color: #e74c3c;
+    margin-top: 5px;
+    font-weight: bold;
 }
 
 /* タイマー表示 */
