@@ -1,20 +1,26 @@
-// アプリケーションの状態管理
+// アプリケーション状態管理
 let balance = 100000;
 let orders = [];
 let orderCounter = 0;
+let pendingCancelOrder = null;
 
 /**
  * 残高表示を更新し、ボタンの有効/無効を制御
  */
 function updateBalance() {
-    document.getElementById('balance').textContent = balance.toLocaleString();
+    const balanceElement = document.getElementById('balance');
+    if (balanceElement) {
+        balanceElement.textContent = balance.toLocaleString();
+    }
     
     // ボタンの有効/無効を更新
     const orderButtons = document.querySelectorAll('.order-btn');
     const prices = [10000, 15000, 18000];
     
     orderButtons.forEach((btn, index) => {
-        btn.disabled = balance < prices[index];
+        if (prices[index]) {
+            btn.disabled = balance < prices[index];
+        }
     });
 }
 
@@ -71,48 +77,101 @@ function deliverOrder(orderId) {
 }
 
 /**
+ * 納品通知を表示
+ * @param {Object} order - 注文オブジェクト
+ */
+function showDeliveryNotification(order) {
+    const notification = document.getElementById('delivery-notification');
+    const message = document.getElementById('delivery-message');
+    
+    if (notification && message) {
+        message.textContent = `電気ケーブル ${order.length}m が納品されました！`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 4000);
+    }
+}
+
+/**
+ * キャンセルモーダルを表示
+ * @param {Object} order - 注文オブジェクト
+ */
+function showCancelModal(order) {
+    const modal = document.getElementById('cancel-modal');
+    const message = document.getElementById('cancel-message');
+    
+    if (modal && message) {
+        const cancellationFee = Math.floor(order.price / 2);
+        const refund = order.price - cancellationFee;
+        
+        message.innerHTML = `
+            注文 #${order.id} - 電気ケーブル ${order.length}m をキャンセルしますか？<br><br>
+            <strong>キャンセル手数料:</strong> ¥${cancellationFee.toLocaleString()}<br>
+            <strong>返金額:</strong> ¥${refund.toLocaleString()}
+        `;
+        
+        pendingCancelOrder = order;
+        modal.classList.add('show');
+    }
+}
+
+/**
+ * キャンセルモーダルを非表示
+ */
+function hideCancelModal() {
+    const modal = document.getElementById('cancel-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        pendingCancelOrder = null;
+    }
+}
+
+/**
  * 注文をキャンセルする
  * @param {number} orderId - 注文ID
  */
 function cancelOrder(orderId) {
-    console.log('cancelOrder called with ID:', orderId);
+    console.log('キャンセル要求 - 注文ID:', orderId);
     const order = orders.find(o => o.id === orderId);
-    console.log('Found order:', order);
     
-    if (!order) {
-        console.log('Order not found');
-        return;
-    }
-    
-    if (order.delivered) {
-        console.log('Order already delivered');
-        return;
-    }
-    
-    if (order.cancelled) {
-        console.log('Order already cancelled');
+    if (!order || order.delivered || order.cancelled) {
+        console.log('キャンセル不可:', order ? '配送完了またはキャンセル済み' : '注文が見つからない');
         return;
     }
 
+    console.log('モーダルを表示');
+    showCancelModal(order);
+}
+
+/**
+ * キャンセル確定処理
+ */
+function confirmCancellation() {
+    if (!pendingCancelOrder) {
+        console.log('キャンセル対象の注文がありません');
+        return;
+    }
+
+    const order = pendingCancelOrder;
     const cancellationFee = Math.floor(order.price / 2);
     const refund = order.price - cancellationFee;
     
-    console.log('Cancellation fee:', cancellationFee, 'Refund:', refund);
+    console.log('キャンセル実行中...');
+    console.log('手数料:', cancellationFee, '返金額:', refund);
     
-    const userConfirmed = confirm(`キャンセル手数料として¥${cancellationFee.toLocaleString()}がかかります。¥${refund.toLocaleString()}が返金されます。\n\nキャンセルしますか？`);
-    console.log('User confirmed:', userConfirmed);
+    order.cancelled = true;
+    balance += refund;
     
-    if (userConfirmed) {
-        console.log('Processing cancellation...');
-        order.cancelled = true;
-        balance += refund;
-        console.log('Order cancelled, new balance:', balance);
-        updateBalance();
-        updateOrdersDisplay();
-        showCancellationNotification(order, refund, cancellationFee);
-    } else {
-        console.log('User cancelled the cancellation');
-    }
+    console.log('新しい残高:', balance);
+    
+    updateBalance();
+    updateOrdersDisplay();
+    showCancellationNotification(order, refund, cancellationFee);
+    hideCancelModal();
+    
+    console.log('キャンセル完了');
 }
 
 /**
@@ -125,33 +184,19 @@ function showCancellationNotification(order, refund, fee) {
     const notification = document.getElementById('delivery-notification');
     const message = document.getElementById('delivery-message');
     
-    notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-    message.innerHTML = `注文 #${order.id} をキャンセルしました<br>返金額: ¥${refund.toLocaleString()} (手数料: ¥${fee.toLocaleString()})`;
-    notification.classList.add('show');
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-        // 通知の背景色を元に戻す
+    if (notification && message) {
+        notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        message.innerHTML = `注文 #${order.id} をキャンセルしました<br>返金額: ¥${refund.toLocaleString()} (手数料: ¥${fee.toLocaleString()})`;
+        notification.classList.add('show');
+        
         setTimeout(() => {
-            notification.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
-        }, 500);
-    }, 4000);
-}
-
-/**
- * 納品通知を表示
- * @param {Object} order - 注文オブジェクト
- */
-function showDeliveryNotification(order) {
-    const notification = document.getElementById('delivery-notification');
-    const message = document.getElementById('delivery-message');
-    
-    message.textContent = `電気ケーブル ${order.length}m が納品されました！`;
-    notification.classList.add('show');
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 4000);
+            notification.classList.remove('show');
+            // 通知の背景色を元に戻す
+            setTimeout(() => {
+                notification.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+            }, 500);
+        }, 4000);
+    }
 }
 
 /**
@@ -159,6 +204,8 @@ function showDeliveryNotification(order) {
  */
 function updateOrdersDisplay() {
     const container = document.getElementById('orders-container');
+    
+    if (!container) return;
     
     if (orders.length === 0) {
         container.innerHTML = '<div class="no-orders">まだ発注がありません</div>';
@@ -235,7 +282,32 @@ function updateOrdersDisplay() {
  * アプリケーション初期化
  */
 function initializeApp() {
+    console.log('アプリケーションを初期化中...');
+    
+    // 残高表示を初期化
     updateBalance();
+    
+    // モーダルのイベントリスナーを設定
+    const confirmButton = document.getElementById('confirm-cancel');
+    const cancelButton = document.getElementById('cancel-cancel');
+    const modal = document.getElementById('cancel-modal');
+    
+    if (confirmButton) {
+        confirmButton.addEventListener('click', confirmCancellation);
+    }
+    
+    if (cancelButton) {
+        cancelButton.addEventListener('click', hideCancelModal);
+    }
+    
+    // モーダル背景クリックで閉じる
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideCancelModal();
+            }
+        });
+    }
     
     // 1秒ごとにタイマーを更新
     setInterval(() => {
@@ -243,7 +315,28 @@ function initializeApp() {
             updateOrdersDisplay();
         }
     }, 1000);
+    
+    console.log('アプリケーション初期化完了');
 }
 
 // DOMが読み込まれた時に初期化を実行
 document.addEventListener('DOMContentLoaded', initializeApp);
+
+// エラーハンドリング
+window.addEventListener('error', function(e) {
+    console.error('JavaScript エラー:', e.error);
+});
+
+// デバッグ用の関数（開発者コンソールで使用可能）
+window.debugApp = {
+    getOrders: () => orders,
+    getBalance: () => balance,
+    resetApp: () => {
+        orders = [];
+        orderCounter = 0;
+        balance = 100000;
+        updateBalance();
+        updateOrdersDisplay();
+        console.log('アプリケーションをリセットしました');
+    }
+};
