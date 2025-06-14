@@ -3,6 +3,45 @@ let balance = 100000;
 let orders = [];
 let orderCounter = 0;
 let pendingCancelOrder = null;
+let warehouseCostInterval;
+
+/**
+ * 倉庫代計算とタイマー開始
+ */
+function startWarehouseCostTimer() {
+    if (warehouseCostInterval) return; // 既に開始している場合は何もしない
+    
+    warehouseCostInterval = setInterval(() => {
+        let totalCost = 0;
+        let hasWarehouseItems = false;
+        
+        orders.forEach(order => {
+            if (order.inWarehouse) {
+                const now = new Date();
+                const secondsInWarehouse = Math.floor((now - order.warehouseEntryTime) / 1000);
+                const costForThisOrder = secondsInWarehouse * 10;
+                totalCost += 10; // 毎秒10円
+                hasWarehouseItems = true;
+                
+                // 累積倉庫代を更新
+                order.totalWarehouseCost = secondsInWarehouse * 10;
+            }
+        });
+        
+        if (hasWarehouseItems) {
+            balance -= totalCost;
+            if (balance < 0) balance = 0; // 残高がマイナスにならないようにする
+            updateBalance();
+            updateOrdersDisplay();
+        }
+        
+        // 倉庫に商品がない場合はタイマーを停止
+        if (!hasWarehouseItems && warehouseCostInterval) {
+            clearInterval(warehouseCostInterval);
+            warehouseCostInterval = null;
+        }
+    }, 1000);
+}
 
 /**
  * 残高表示を更新し、ボタンの有効/無効を制御
@@ -50,7 +89,11 @@ function orderProduct(length, price, deliveryMinutes) {
         deliveryTime: deliveryTime,
         deliveryMinutes: deliveryMinutes,
         delivered: false,
-        cancelled: false
+        cancelled: false,
+        inWarehouse: false,
+        warehouseEntryTime: null,
+        totalWarehouseCost: 0,
+        removedFromWarehouse: false
     };
     
     orders.push(order);
@@ -64,16 +107,47 @@ function orderProduct(length, price, deliveryMinutes) {
 }
 
 /**
- * 注文を納品状態にする
+ * 注文を納品状態にする（倉庫保管開始）
  * @param {number} orderId - 注文ID
  */
 function deliverOrder(orderId) {
     const order = orders.find(o => o.id === orderId);
     if (order && !order.delivered && !order.cancelled) {
         order.delivered = true;
+        order.inWarehouse = true;
+        order.warehouseEntryTime = new Date();
+        order.totalWarehouseCost = 0;
+        
         updateOrdersDisplay();
         showDeliveryNotification(order);
+        startWarehouseCostTimer(); // 倉庫代計算開始
     }
+}
+
+/**
+ * 倉庫から商品を取り出す
+ * @param {number} orderId - 注文ID
+ */
+function removeFromWarehouse(orderId) {
+    const order = orders.find(o => o.id === orderId);
+    if (!order || !order.inWarehouse || order.removedFromWarehouse) {
+        return;
+    }
+    
+    console.log('倉庫から取り出し - 注文ID:', orderId);
+    
+    order.inWarehouse = false;
+    order.removedFromWarehouse = true;
+    
+    const now = new Date();
+    const secondsInWarehouse = Math.floor((now - order.warehouseEntryTime) / 1000);
+    order.totalWarehouseCost = secondsInWarehouse * 10;
+    
+    console.log('倉庫滞在時間:', secondsInWarehouse, '秒');
+    console.log('総倉庫代:', order.totalWarehouseCost, '円');
+    
+    updateOrdersDisplay();
+    showWarehouseRemovalNotification(order);
 }
 
 /**
@@ -85,11 +159,34 @@ function showDeliveryNotification(order) {
     const message = document.getElementById('delivery-message');
     
     if (notification && message) {
-        message.textContent = `電気ケーブル ${order.length}m が納品されました！`;
+        message.textContent = `電気ケーブル ${order.length}m が納品され、倉庫に保管されました！`;
         notification.classList.add('show');
         
         setTimeout(() => {
             notification.classList.remove('show');
+        }, 4000);
+    }
+}
+
+/**
+ * 倉庫取り出し通知を表示
+ * @param {Object} order - 注文オブジェクト
+ */
+function showWarehouseRemovalNotification(order) {
+    const notification = document.getElementById('delivery-notification');
+    const message = document.getElementById('delivery-message');
+    
+    if (notification && message) {
+        notification.style.background = 'linear-gradient(135deg, #9b59b6, #8e44ad)';
+        message.innerHTML = `注文 #${order.id} を倉庫から取り出しました<br>総倉庫代: ¥${order.totalWarehouseCost.toLocaleString()}`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            // 通知の背景色を元に戻す
+            setTimeout(() => {
+                notification.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+            }, 500);
         }, 4000);
     }
 }
@@ -213,9 +310,11 @@ function updateOrdersDisplay() {
     }
     
     const sortedOrders = [...orders].sort((a, b) => {
-        // キャンセル済み、配送中、納品完了の順でソート
+        // 配送中、倉庫保管中、取り出し済み、キャンセル済みの順でソート
         const getStatusPriority = (order) => {
-            if (order.cancelled) return 2;
+            if (order.cancelled) return 3;
+            if (order.removedFromWarehouse) return 2;
+            if (order.inWarehouse) return 1;
             if (order.delivered) return 1;
             return 0; // 配送中
         };
@@ -235,6 +334,27 @@ function updateOrdersDisplay() {
             statusClass = 'status-cancelled';
             statusText = '❌ キャンセル済';
             timerDisplay = '--:--';
+        } else if (order.removedFromWarehouse) {
+            statusClass = 'status-delivered';
+            statusText = '✅ 取り出し済';
+            timerDisplay = '完了';
+        } else if (order.inWarehouse) {
+            statusClass = 'status-in-warehouse';
+            statusText = '📦 倉庫保管中';
+            const now = new Date();
+            const secondsInWarehouse = Math.floor((now - order.warehouseEntryTime) / 1000);
+            const currentCost = secondsInWarehouse * 10;
+            timerDisplay = `¥${currentCost.toLocaleString()}`;
+            
+            // 倉庫から出すボタンを追加
+            actionButton = `
+                <button class="warehouse-btn" onclick="removeFromWarehouse(${order.id})" type="button">
+                    倉庫から出す
+                </button>
+                <div class="warehouse-cost">
+                    毎秒 ¥10 の倉庫代が発生中
+                </div>
+            `;
         } else if (order.delivered) {
             statusClass = 'status-delivered';
             statusText = '✅ 納品完了';
@@ -271,6 +391,7 @@ function updateOrdersDisplay() {
                 <div style="font-size: 0.9rem; color: #7f8c8d; margin-top: 10px;">
                     発注価格: ¥${order.price.toLocaleString()} | 
                     発注時刻: ${order.orderTime.toLocaleString('ja-JP')}
+                    ${order.removedFromWarehouse ? `<br>総倉庫代: ¥${order.totalWarehouseCost.toLocaleString()}` : ''}
                 </div>
                 ${actionButton}
             </div>
@@ -282,7 +403,7 @@ function updateOrdersDisplay() {
  * アプリケーション初期化
  */
 function initializeApp() {
-    console.log('アプリケーションを初期化中...');
+    console.log('電気ケーブル発注システムを初期化中...');
     
     // 残高表示を初期化
     updateBalance();
@@ -331,12 +452,22 @@ window.addEventListener('error', function(e) {
 window.debugApp = {
     getOrders: () => orders,
     getBalance: () => balance,
+    getWarehouseItems: () => orders.filter(order => order.inWarehouse),
     resetApp: () => {
         orders = [];
         orderCounter = 0;
         balance = 100000;
+        if (warehouseCostInterval) {
+            clearInterval(warehouseCostInterval);
+            warehouseCostInterval = null;
+        }
         updateBalance();
         updateOrdersDisplay();
         console.log('アプリケーションをリセットしました');
+    },
+    addBalance: (amount) => {
+        balance += amount;
+        updateBalance();
+        console.log(`残高に¥${amount.toLocaleString()}を追加しました。新しい残高: ¥${balance.toLocaleString()}`);
     }
 };
